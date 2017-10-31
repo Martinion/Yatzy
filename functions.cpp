@@ -24,20 +24,6 @@ void play()
 
         rollDice(&playerArray[0]);
 
-        for(int i = 0; i < 5; i++)
-        {
-            std::cout << playerArray[0].heldDice[i] << std::endl;
-        }
-
-        sort(playerArray[0].heldDice);
-
-        std::cout << std::endl << "------------" << std::endl;
-
-        for(int i = 0; i < 5; i++)
-        {
-            std::cout << playerArray[0].heldDice[i] << std::endl;
-        }
-
         inPlay = false;
     }
 
