@@ -3,8 +3,8 @@
 
 struct players
 {
-    int heldDice[5]{0, 0, 0, 0, 0};
-    bool reroll[5]{1, 1, 1, 1, 1};
+    int heldDice[5] = {0, 0, 0, 0, 0};
+    bool reroll[5] = {1, 1, 1, 1, 1};
     int points{0};
     std::string name;
 };

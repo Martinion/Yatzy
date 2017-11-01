@@ -91,7 +91,7 @@ void sort(int* dice)
     {
         for(int j = i; j < 5; j++)
         {
-            if(dice[j] < dice[i])
+            if(dice[j] < dice[i])                       //bruker selection sort for å sortere high til low
                 std::swap(dice[i], dice[j]);
         }
     }
@@ -192,13 +192,13 @@ void turn(players* player, int num, int turn)
 
 void score(int dice[], int round, int* score)
 {
-    sort(dice);
+    sort(dice);                                             //sorterer terningene for dem fleste testene krever at dem er sortert
 
     switch(round)
     {
     case 1:
     case 2:
-    case 3:
+    case 3:                                     //runde 1-6 bruker samme metode, men annet tall
     case 4:
     case 5:
     case 6:
@@ -208,7 +208,7 @@ void score(int dice[], int round, int* score)
         *score += testPairs(dice);
         break;
     case 8:
-        *score += testTriplets(dice);
+        *score += testTriplets(dice);                           //Test for dem forskjellige casene
         break;
     case 9:
         *score += testQuadrets(dice);
@@ -233,7 +233,7 @@ int testDigits(int dice[], int digit)
 
     for(int i = 0; i < 5; i++)
     {
-        if(dice[i] == digit)
+        if(dice[i] == digit)                    //Går gjennom alle verdiene i dice og sjekker om dem er lik digit, setter total verdien inn i sum
             sum += dice[i];
     }
 
@@ -242,14 +242,12 @@ int testDigits(int dice[], int digit)
 
 int testPairs(int dice[])
 {
-    sort(dice);
-
     int sum{0};
 
     for(int i = 0; i < 4; i++)
     {
-        if(dice[i] == dice[i + 1])
-        {
+        if(dice[i] == dice[i + 1])                   //Sjekker oppover fra 0 om to tall er like, om eit par blir funnet hopper den eit steg ekstra for å ikkje
+        {                                            //telle tre like som 2 par. Legger verdien av parene inn i sum
             for(int j = 0; j < 2; j++)
             {
                 sum += dice[i + j];
@@ -269,7 +267,7 @@ int testTriplets(int dice[])
 
     for(int i = 0; i < 3; i++)
     {
-        if(dice[i] == dice[i + 1] && dice[i] == dice[i + 2])
+        if(dice[i] == dice[i + 1] && dice[i] == dice[i + 2])                //samme prosedyre som par, men annen sjekk
         {
             for(int j = 0; j < 3; j++)
             {
@@ -286,7 +284,7 @@ int testQuadrets(int dice[])
 {
     int sum{0};
 
-    for(int i = 0; i < 2; i++)
+    for(int i = 0; i < 2; i++)                                          //samme prosedyre som par og triplet, men annen sjekk
     {
         if(dice[i] == dice[i + 1] && dice[i] == dice[i + 2] && dice[i] == dice[i +3])
         {
@@ -303,7 +301,7 @@ int testQuadrets(int dice[])
 
 int testYatzy(int dice[])
 {
-    int sum{0};
+    int sum{0};                                                 //same, same, but different
 
     if(dice[0] == dice[1] && dice[0] == dice[2] && dice[0] == dice[3] && dice[0] == dice[4])
         for(int i = 0; i < 5; i++)
@@ -319,8 +317,8 @@ int testFullHouse(int dice[])
 
     if(dice[0] == dice[1] && ((dice[1] == dice[2] && dice[3] == dice[4]) || (dice[2] == dice[3] && dice[3] == dice[4])))
     {
-        for(int i = 0; i < 5; i++)
-        {
+        for(int i = 0; i < 5; i++)                                              //sjekker om dem to første er like, so om dem to første er lik med den tredje, deretter om dem to siste er like
+        {                                                                       //Om ikkje sjekkes dem tre siste om dem er like.
             sum += dice[i];
         }
     }
@@ -333,7 +331,7 @@ int testStraight(int dice[])
 
     if(dice[0] == (dice[1] - 1) && dice[0] == (dice[2] - 2) && dice[0] == (dice[3] - 3) && dice[0] == (dice[4] - 4))
     {
-        for(int i = 0; i < 5; i++)
+        for(int i = 0; i < 5; i++)                  //sjekker om tallene former ein rekke, om den gjør settes alle verdiene inn i sum
         {
             sum += dice[i];
         }
@@ -344,23 +342,17 @@ int testStraight(int dice[])
 void displayScore(players* player, int num, bool calculateWinner)
 {
     int score[num];
-    std::string name[num];
+    std::string name[num];              //brukes til sortering for å ikkje rote med spillerrekkefølgen
 
     for(int i = 0; i < num; i++)
     {
         score[i] = player[i].points;
         name[i] = player[i].name;
     }
-    sortScoreBoard(score, name, num);
+    sortScoreBoard(score, name, num);       //sorterer score og name sånn at den med mest poeng havner øverst
 
-    std::cout << "Current standing: " << std::endl << std::endl;
 
-    for(int i = 0; i < num; i++)
-    {
-        std::cout << i + 1 << ": " << name[i] << " - " << score[i] << std::endl << std::endl;
-    }
-
-    if(calculateWinner)
+    if(calculateWinner)         //vist true blir sendt inn som parameter vil den kalkulere vinneren
     {
         bool sharedFirstPlace = true;
 
@@ -368,7 +360,7 @@ void displayScore(players* player, int num, bool calculateWinner)
 
         for(int i = 0; i < num && sharedFirstPlace; i++)
         {
-            if(score[i] != score[i + 1])
+            if(score[i] != score[i + 1])                    //sjekker om det er delt førsteplass.
                 sharedFirstPlace = false;
             else
             {
@@ -376,6 +368,16 @@ void displayScore(players* player, int num, bool calculateWinner)
             }
         }
         std::cout << " with " << score[0] << " points!" << std::endl;
+    }
+    else
+    {
+        std::cout << "Current standing: " << std::endl << std::endl;
+
+        for(int i = 0; i < num; i++)
+        {
+            std::cout << i + 1 << ": " << name[i] << " - " << score[i] << std::endl << std::endl;       //printer ut scoreboarden
+        }
+
     }
 }
 
@@ -387,7 +389,7 @@ void sortScoreBoard(int score[], std::string name[], int num)
         {
             if(score[j] > score[i])
             {
-                std::swap(score[j], score[i]);
+                std::swap(score[j], score[i]);              //selection sort for å plassere høyeste scoren øverst
                 std::swap(name[j], name[i]);
             }
         }
@@ -400,7 +402,7 @@ bool yesNoMenu()
 
     while(true)
     {
-        std::cout << "Y/N";
+        std::cout << "Y/N";         //simpel ja/nei meny som returnerer true eller false
 
         std::cin >> choice;
 
@@ -428,7 +430,7 @@ void displayPlayChart()
               << "Round 4: Fours" << std::endl
               << "Round 5: Fives" << std::endl
               << "Round 6: Sixes" << std::endl
-              << "Round 7: Pairs" << std::endl
+              << "Round 7: Pairs" << std::endl                                  //Viser kva det spilles om i rundene
               << "Round 8: Triplets" << std::endl
               << "Round 9: Quadrets" << std::endl
               << "Round 10: Yatzy" << std::endl
