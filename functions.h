@@ -25,5 +25,9 @@ int testQuadrets(int dice[]);
 int testYatzy(int dice[]);
 int testFullHouse(int dice[]);
 int testStraight(int dice[]);
+void displayScore(players *player, int num, bool calculateWinner = false);
+void sortScoreBoard(int score[], std::string name[], int num);
+bool yesNoMenu();
+void displayPlayChart();
 
 #endif // FUNCTIONS_H

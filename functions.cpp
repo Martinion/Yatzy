@@ -24,7 +24,10 @@ void play()
 
         for(int i = 1; i < 13; i++)                 //satte i = 1 for å stemme med rundenummer
         {
+            displayPlayChart();
+
             std::cout << "Round " << i << ":" << std::endl;
+
             for(int j = 0; j < numberOfPlayers; j++)
             {
                 for(int l = 0; l < 5; l++)
@@ -33,12 +36,17 @@ void play()
                 }
             }
             turn(playerArray, numberOfPlayers, i);  //setter alle spillerene inn i ein runde
+
+            displayScore(playerArray, numberOfPlayers);
         }
 
-        inPlay = false;
-    }
+        displayScore(playerArray, numberOfPlayers, true);
 
-    std::cout << "Testy 2: The second coming" << std::endl;         //test line, plz ignore
+        std::cout << "Would you like to play again?" << std::endl;
+        inPlay = yesNoMenu();
+
+        delete playerArray;
+    }
 }
 
 players* createPlayers(int* num)
@@ -158,23 +166,28 @@ void turn(players* player, int num, int turn)
 {
     for(int i = 0; i < num; i++)
     {
-        bool rerollDone{false};
-
         std::cout << player[i].name << "'s turn" << std::endl;
 
-        for(int j = 0; j < 3 && !rerollDone; j++)
+        for(int j = 0; j < 3; j++)
         {
             std::cout << "Throw " << j + 1 << ":" << std::endl;
             rollDice(player[i].heldDice, player[i].reroll);
 
-            if(i < 2 && !rerollDone)                                       //tester om det er siste kast
+            if(j < 2)                                       //tester om det er siste kast
                 rerollManager(&player[i]);
+            else
+            {
+                for(int i = 0; i < 5; i++)
+                {
+                    std:: cout << static_cast<char>('A' + i) << ": " << player->heldDice[i] << std::endl;
+                }
+                std::cout << std::endl;
+            }
         }
 
         score(player[i].heldDice, turn, &player[i].points);
     }
 }
-
 
 void score(int dice[], int round, int* score)
 {
@@ -220,7 +233,7 @@ int testDigits(int dice[], int digit)
     for(int i = 0; i < 5; i++)
     {
         if(dice[i] == digit)
-        sum += dice[i];
+            sum += dice[i];
     }
 
     return sum;
@@ -304,12 +317,12 @@ int testFullHouse(int dice[])
     int sum{0};
 
     if(dice[0] == dice[1] && ((dice[1] == dice[2] && dice[3] == dice[4]) || (dice[2] == dice[3] && dice[3] == dice[4])))
-            {
-                for(int i = 0; i < 5; i++)
-                {
-                    sum += dice[i];
-                }
-            }
+    {
+        for(int i = 0; i < 5; i++)
+        {
+            sum += dice[i];
+        }
+    }
     return sum;
 }
 
@@ -325,4 +338,100 @@ int testStraight(int dice[])
         }
     }
     return sum;
+}
+
+void displayScore(players* player, int num, bool calculateWinner)
+{
+    int score[num];
+    std::string name[num];
+
+    for(int i = 0; i < num; i++)
+    {
+        score[i] = player[i].points;
+        name[i] = player[i].name;
+    }
+    sortScoreBoard(score, name, num);
+
+    std::cout << "Current standing: " << std::endl << std::endl;
+
+    for(int i = 0; i < num; i++)
+    {
+        std::cout << i + 1 << ": " << name[i] << " - " << score[i] << std::endl << std::endl;
+    }
+
+    if(calculateWinner)
+    {
+        bool sharedFirstPlace = true;
+
+        std::cout << "The winner is " << name[0];
+
+        for(int i = 0; i < num && sharedFirstPlace; i++)
+        {
+            if(score[i] != score[i + 1])
+                sharedFirstPlace = false;
+            else
+            {
+                std::cout << " and " << name[i + 1];
+            }
+        }
+        std::cout << " with " << score[0] << " points!" << std::endl;
+    }
+}
+
+void sortScoreBoard(int score[], std::string name[], int num)
+{
+    for(int i = 0; i < num; i++)
+    {
+        for(int j = i; j < num; j++)
+        {
+            if(score[j] > score[i])
+            {
+                std::swap(score[j], score[i]);
+                std::swap(name[j], name[i]);
+            }
+        }
+    }
+}
+
+bool yesNoMenu()
+{
+    char choice;
+
+    while(true)
+    {
+        std::cout << "Y/N";
+
+        std::cin >> choice;
+
+        cinSanitizer();
+
+        switch(choice)
+        {
+        case 'y':
+        case 'Y':
+            return true;
+            break;
+        case 'n':
+        case 'N':
+            return false;
+        }
+    }
+}
+
+void displayPlayChart()
+{
+    std::cout << std::endl
+              << "Round 1: Ones" << std::endl
+              << "Round 2: Twos" << std::endl
+              << "Round 3: Threes" << std::endl
+              << "Round 4: Fours" << std::endl
+              << "Round 5: Fives" << std::endl
+              << "Round 6: Sixes" << std::endl
+              << "Round 7: Pairs" << std::endl
+              << "Round 8: Triplets" << std::endl
+              << "Round 9: Quadrets" << std::endl
+              << "Round 10: Yatzy" << std::endl
+              << "Round 11: Full house" << std::endl
+              << "Round 12: straight" << std::endl << std::endl;
+
 }
