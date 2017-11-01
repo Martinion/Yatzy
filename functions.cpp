@@ -19,7 +19,8 @@ void play()
     while(inPlay)
     {
         players* playerArray = new players;
-        int numberOfPlayers;                                //lager dynamisk array for spillerene
+        delete playerArray;
+        int numberOfPlayers;                                //Lager array for spillerene
         playerArray = createPlayers(&numberOfPlayers);      //create players tar numberOfPlayers, gir den ein value og lager spillerene
 
         for(int i = 1; i < 13; i++)                 //satte i = 1 for å stemme med rundenummer
