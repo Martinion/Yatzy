@@ -3,14 +3,9 @@
 #include <cstdlib>
 #include "functions.h"
 
-
-
-
-
-
 int main()
 {
-    srand(time(NULL));
+    srand(time(nullptr));
 
     play();
 }
