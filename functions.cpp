@@ -18,7 +18,7 @@ void play()
 
     while(inPlay)
     {
-        players* playerArray = new players;
+        Players* playerArray = new Players;
         int numberOfPlayers;                                //lager dynamisk array for spillerene
         playerArray = createPlayers(&numberOfPlayers);      //create players tar numberOfPlayers, gir den ein value og lager spillerene
 
@@ -49,7 +49,7 @@ void play()
     }
 }
 
-players* createPlayers(int* num)
+Players* createPlayers(int* num)
 {
     do{
         std::cout << "How many are playing? MAX 6" << std::endl;                    //Tror maks 6 spillere er standard for Yatzy
@@ -65,14 +65,14 @@ players* createPlayers(int* num)
 
     }while(!(0 < *num && *num <= 6));
 
-    players* playerArray = new players [*num];
+    Players* playerArray = new Players [*num];
 
-    playerArray = namePlayers(playerArray, num);        //Navngir spillerene
+    namePlayers(playerArray, num);        //Navngir spillerene
 
     return playerArray;
 }
 
-players* namePlayers(players* playerArray, int* num)
+void namePlayers(Players* playerArray, int* num)
 {
     for(int i = 0; i < *num; i++)
     {
@@ -80,8 +80,6 @@ players* namePlayers(players* playerArray, int* num)
         std::cin >> playerArray[i].name;
         cinSanitizer();
     }
-
-    return playerArray;
 }
 
 void sort(int* dice)
@@ -96,7 +94,7 @@ void sort(int* dice)
     }
 }
 
-void rerollManager(players* player)
+void rerollManager(Players* player)
 {
     bool choiceInTheMaking = true;
 
@@ -162,7 +160,7 @@ void cinSanitizer()
     }
 }
 
-void turn(players* player, int num, int turn)
+void turn(Players* player, int num, int turn)
 {
     for(int i = 0; i < num; i++)
     {
@@ -177,9 +175,9 @@ void turn(players* player, int num, int turn)
                 rerollManager(&player[i]);
             else
             {
-                for(int i = 0; i < 5; i++)
+                for(int k = 0; k < 5; k++)
                 {
-                    std:: cout << static_cast<char>('A' + i) << ": " << player->heldDice[i] << std::endl;
+                    std:: cout << static_cast<char>('A' + i) << ": " << player[i].heldDice[k] << std::endl;
                 }
                 std::cout << std::endl;
             }
@@ -340,7 +338,7 @@ int testStraight(int dice[])
     return sum;
 }
 
-void displayScore(players* player, int num, bool calculateWinner)
+void displayScore(Players* player, int num, bool calculateWinner)
 {
     int score[num];
     std::string name[num];
